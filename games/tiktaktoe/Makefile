@@ -2,6 +2,7 @@ TARGET_EXEC ?= main
 
 BUILD_DIR ?= ./build
 SRC_DIRS  ?= ./src
+TAGS_FILE ?= TAGS
 
 SRC_HEADERS := $(shell find $(SRC_DIRS) -name *.hpp)
 SRCS := $(shell find $(SRC_DIRS) -name *.cpp)
@@ -28,7 +29,7 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 .PHONY: clean
 
 clean:
-	$(RM) -r $(BUILD_DIR)
+	$(RM) -r $(BUILD_DIR) $(TAGS_FILE)
 
 tags:
 	$(TAGS_EXE) $(SRC_HEADERS) $(SRCS)
@@ -39,4 +40,4 @@ run:
 -include $(DEPS)
 
 MKDIR_P ?= mkdir -p
-TAGS_EXE ?= etags
+TAGS_EXE ?= etags -o $(TAGS_FILE)

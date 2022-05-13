@@ -225,6 +225,7 @@ testaSeJogadorGanhou (  ) {
 
   for (int i = 0; i < 9; i++)
     some_test_game.jogadas[i] = jogadas[i];
+  
   if (  verificaSeGanhou ( some_test_game ) ) {
 
     std::cout << "Ganhou" << std::endl;

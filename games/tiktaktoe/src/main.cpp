@@ -4,7 +4,8 @@
 int
 main () {
 
-  jogodavelha (  );
+  // jogodavelha (  );
+  testaSeJogadorGanhou (  );
 
   return 0;
 }
