@@ -2,10 +2,10 @@
 #include "tiktaktoe.hpp"
 
 int
-main () {
+main (  ) {
 
-  // jogodavelha (  );
-  testaSeJogadorGanhou (  );
+  jogodavelha (  );
+  // testaSeJogadorGanhou (  );
 
   return 0;
 }
