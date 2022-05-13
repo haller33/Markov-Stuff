@@ -1,10 +1,8 @@
 #include <iostream>
 #include <random>
 
-// using namespace std;
-
 void
-random_mostly (  ) {
+random_mostly (  ) { // Using  dev device block for random stuff
   
   std::random_device dev;
   std::mt19937 rng(dev());
@@ -42,8 +40,30 @@ random_list_quote_dice(void)
   return 0;
 }
 
+float
+probability (  ) {
+
+  return float(rand () % 100 / 100.0);
+}
+
+bool
+coinflip (  ) {
+  return probability (  ) > 0.5;
+}
+
 int
-main (  ) {
+onehundred_coinflips (  ) {
+
+  // srand( (unsigned)time(NULL) );
+  srand ( 666 );
+
+  for ( auto i = 0; i < 1000; i++ )
+    if ( coinflip (  ) ) 
+      std::cout << "Cara" << std::endl;
+    else
+      std::cout << "Coroa" << std::endl;
 
   return 0;
 }
+
+
