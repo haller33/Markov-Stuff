@@ -43,7 +43,7 @@ random_list_quote_dice(void)
 float
 probability (  ) {
 
-  return float(rand () % 100 / 100.0);
+  return float ( rand () % 100 / 100.0 );
 }
 
 bool
@@ -67,3 +67,9 @@ onehundred_coinflips (  ) {
 }
 
 
+int
+main (  ) {
+
+  onehundred_coinflips (  );
+  return 0;
+}
