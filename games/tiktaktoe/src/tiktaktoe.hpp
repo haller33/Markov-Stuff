@@ -1,3 +1,5 @@
+#ifndef TIKTAKTOE_H
+#define TIKTAKTOE_H
 #include <iostream.h>
 
 int

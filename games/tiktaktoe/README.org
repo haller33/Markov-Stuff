@@ -1,0 +1,8 @@
+
+* Some Tests to use Markov Chains on mini-Game
+
+The idea is to use the markov chain to generate the flow of the computer play
+with the person, and also with the computer so
+
+We are going to use the user input as a integer to set random_seed and then use
+the random on a Markov Chain to choice a possition to go on the tiktaktoe.
