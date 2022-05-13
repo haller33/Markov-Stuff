@@ -34,7 +34,7 @@ tags:
 	$(TAGS_EXE) $(SRC_HEADERS) $(SRCS)
 
 run:
-	./$(BUILD_DIRS)/$(TARGET_EXEC)
+	./$(BUILD_DIR)/$(TARGET_EXEC)
 
 -include $(DEPS)
 
