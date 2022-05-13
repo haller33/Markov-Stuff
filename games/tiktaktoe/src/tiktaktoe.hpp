@@ -1,6 +1,4 @@
-#ifndef TIKTAKTOE_H
-#define TIKTAKTOE_H
-#include <iostream.h>
+#include <iostream>
 
 int
 imprimeVelha ( int *p, int *possicoes ) {
@@ -9,18 +7,18 @@ imprimeVelha ( int *p, int *possicoes ) {
 
   for (int i = 0; i < 3; i++) {
 
-    for (int j = 0; j < 3; j++) {                                             
+    for (int j = 0; j < 3; j++) {
       std::cout << "#";
       std::cout << " ";
 
       int lixo_possicao = j+(3*i);
 
       if ((possicoes[lixo_possicao] == 1) ||
-          (possicoes[lixo_possicao] == 2)) {                                  
+          (possicoes[lixo_possicao] == 2)) {
         if (possicoes[lixo_possicao] == 1) {
 
           std::cout << 'X';
-        } else {                                                              
+        } else {
           std::cout << 'O';
         }
 
@@ -76,6 +74,7 @@ verificaSeGanhou ( int *jogadas ) {
           contador = 0;
         }
       }
+      
       if (contador == 3) {
 
         return true;
@@ -84,7 +83,7 @@ verificaSeGanhou ( int *jogadas ) {
 
     int contador = 0;
 
-     for (int j = 0; j < 3; j+=3) {
+    for (int j = 0; j < 3; j+=3) {
 
       for (int i = 0; i < CON; i++) {
 
@@ -105,19 +104,28 @@ verificaSeGanhou ( int *jogadas ) {
       }
 
       contador = 0;
-     }
+    }
 
-      if ( ( (jogadas[0] == jogo) && (jogadas[4] == jogo) && (jogadas[8] == jogo) ) ||
-            ( (jogadas[2] == jogo) && (jogadas[4] == jogo) && (jogadas[6] == jogo) )
-          ) {
+    if ( ( ( jogadas[0] == jogo ) && ( jogadas[4] == jogo ) &&
+	   ( jogadas[8] == jogo ) ) ||
+	 ( ( jogadas[2] == jogo ) && ( jogadas[4] == jogo ) &&
+	   ( jogadas[6] == jogo ) )
+	 ) {
 
-        return true;
-      }
+      return true;
+    }
 
   }
 
   return false;
 }
+
+struct {
+  int vet [9] = { 1,2,3,4,5,6,7,8,9 };
+  int jogadas [9] = { 0,0,0,0,0,0,0,0,0 };
+  int jogo = 0;
+  bool flag = false;
+} JogoVelha;
 
 int
 jogodavelha (  ) {
@@ -130,13 +138,13 @@ jogodavelha (  ) {
 
   std::cout << "Digite -1 para sair: " << std::endl;
 
-  imprimeVelha (vet, jogadas);
+  imprimeVelha ( vet, jogadas );
 
   while ( jogo >= 0 ) {
 
     std::cout << "Digite uma possicao: ";
     std::cin >> jogo;
-                                                                                  if ( ( jogo >= 1 ) && ( jogo <= 9 ) ) {
+    if ( ( jogo >= 1 ) && ( jogo <= 9 ) ) {
 
       if ( verificaJogadaValida ( jogadas, jogo ) ) {
 
@@ -154,20 +162,21 @@ jogodavelha (  ) {
       } else {
 
         std::cout << "Digite uma possicao valida" <<
-                         std::endl;
+	  std::endl;
 
         flag = !flag;
       }
 
-    } else {                                                                  
+    } else {
       std::cout << "Digite um numero entre 1 e 9" <<
-                         std::endl;
-    }                                                                         
+	std::endl;
+    }
+    
     if ( verificaSeGanhou ( jogadas ) ) {
 
       char caracter;
 
-      if (flag) {
+      if ( flag ) {
 
         caracter = 'X'; // X
       } else {
@@ -175,14 +184,14 @@ jogodavelha (  ) {
         caracter = 'O'; // O
       }
 
-      imprimeVelha (vet, jogadas);
+      imprimeVelha ( vet, jogadas );
 
       std::cout << "Parabéns, o Jogador " << caracter << " Ganhou! \n \n" << std::endl;
 
       std::cout << "Deseja Continuar? \n(digite qualquer numero diferente de -1) \n:";
       std::cin >> jogo;
 
-      if (jogo != -1) {
+      if ( jogo != -1 ) {
 
         for (int i = 0; i < 9; i++) {
 
@@ -192,21 +201,23 @@ jogodavelha (  ) {
     }
 
     std::cin.clear();
-    std::cin.ignore(80, '\n');
-                                                                                  imprimeVelha (vet, jogadas);
+    std::cin.ignore(80, '\n'); // for space problems with cin
+    imprimeVelha (vet, jogadas);
 
     flag = !flag;
   }
 
 
   return 0;
-}                                                                             
+}
 
 int
 testaSeJogadorGanhou (  ) {
-                                                                                int vet [9] =     { 1,2,3,4,5,6,7,8,9 }; // OK To verify horizontal values of game velha
-  int jogadas [9] = { 2,0,2,1,2,1,2,1,2 };
-                                                                                if (  verificaSeGanhou ( jogadas ) ) {
+  int vet [9] =     { 1,2,3,4,5,6,7,8,9 };
+  int jogadas [9] = { 2,0,2,
+		      1,2,1,
+		      2,1,2 };  // OK To verify horizontal values of game velha
+  if (  verificaSeGanhou ( jogadas ) ) {
 
     std::cout << "Ganhou" << std::endl;
   } else {
