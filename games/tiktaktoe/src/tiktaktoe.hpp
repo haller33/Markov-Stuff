@@ -1,18 +1,17 @@
 #include <iostream>
+#include <random>
 
 typedef struct {
   int possitions [9] = { 1,2,3,4,5,6,7,8,9 };
   int jogadas [9] = { 0,0,0,0,0,0,0,0,0 };
   int jogada = 0;
-  bool flag = true;
+  bool replay = false;
+  bool playerTru = true;
+  bool player_turn = true;
 } GameTik;
 
-
-int
+void
 imprimeVelha ( GameTik gameof ) {
-
-  int *p = gameof.jogadas;
-  int *possicoes = gameof.possitions;
   
   std::cout << std::endl << "###############" << std::endl;
 
@@ -24,9 +23,9 @@ imprimeVelha ( GameTik gameof ) {
 
       int lixo_possicao = j+(3*i);
 
-      if ((possicoes[lixo_possicao] == 1) ||
-          (possicoes[lixo_possicao] == 2)) {
-        if (possicoes[lixo_possicao] == 1) {
+      if ((gameof.jogadas[lixo_possicao] == 1) ||
+          (gameof.jogadas[lixo_possicao] == 2)) {
+        if (gameof.jogadas[lixo_possicao] == 1) {
 
           std::cout << 'X';
         } else {
@@ -35,7 +34,7 @@ imprimeVelha ( GameTik gameof ) {
 
       } else {
 
-        std::cout << p[lixo_possicao];
+        std::cout << gameof.possitions[lixo_possicao];
       }
 
       std::cout << " ";
@@ -45,21 +44,35 @@ imprimeVelha ( GameTik gameof ) {
     std::cout << std::endl << "###############" ;
     std::cout << std::endl;
   }
-
-  return 0;
 }
 
 bool
 verificaJogadaValida ( GameTik gameof ) {
 
-  int *jogadas = gameof.jogadas;
-  int possicao = gameof.jogada;
-  if (jogadas[possicao-1] == 0) {
+  if ( ( ( gameof.jogada >= 1 ) &&
+	( gameof.jogada <= 9 ) ) &&
+      gameof.jogadas[gameof.jogada-1] == 0 ) {
 
     return true;
   }
 
   return false;
+}
+
+GameTik
+clear_jogadas ( GameTik gameof ) {
+
+  if ( gameof.replay ) {
+
+    gameof.replay = false;
+    
+    for (int i = 0; i < 9; i++) {
+      
+      gameof.jogadas[i] = 0;
+    }
+  }
+
+  return gameof;
 }
 
 bool
@@ -134,84 +147,119 @@ verificaSeGanhou ( GameTik gameof  ) {
   return false;
 }
 
+
+char
+caracterOfPlayer ( GameTik gameof ) {
+  
+  char caracter;
+
+  if ( gameof.player_turn )
+    caracter = 'X'; // X
+  else
+    caracter = 'O'; // O
+
+  return caracter;
+}
+
+int
+number_player ( GameTik gameof ) {
+
+  int caracter_simbol_number = 0;
+  
+  if ( gameof.player_turn ) {
+	
+    caracter_simbol_number = 1; // X
+  } else {
+    
+    caracter_simbol_number = 2; // O
+  }
+
+  return caracter_simbol_number;
+}
+
+
+GameTik
+inputData ( GameTik gameof ) {
+
+  int caracter_simbol_number = 0;
+
+  std::cout << "Digite uma possicao: ";
+  std::cin >> gameof.jogada;
+  if ( not verificaJogadaValida ( gameof ) ) {
+      
+    std::cout << "Digite um numero entre 1 e 9" << std::endl;
+    inputData ( gameof );
+  }
+  
+  caracter_simbol_number = number_player ( gameof );
+  
+  gameof.jogadas[gameof.jogada-1] = caracter_simbol_number;
+  
+  return gameof;
+}
+
+void
+clear_game_buffers (  ) {
+
+  std::cin.clear();
+  std::cin.ignore(80, '\n');
+}
+
+GameTik
+continuePlayertru ( GameTik gameof ) {
+  
+  if ( verificaSeGanhou ( gameof ) ) {
+    char caracter_simbol = caracterOfPlayer ( gameof );
+    
+    std::cout << "\nParabéns, o Jogador " << caracter_simbol
+	      << " Ganhou!\n" << std::endl;
+
+    imprimeVelha ( gameof );
+    
+    std::cout << "\nDeseja Continuar? \n(digite qualquer "
+	      << "numero diferente de -1) \n:";
+    std::cin >> gameof.jogada;
+
+    if ( gameof.jogada != -1 ) {
+      gameof.playerTru = true;
+      gameof.replay = true;
+    } else
+      gameof.playerTru = false;
+  }
+  
+  return gameof;
+}
+
+int
+computer ( GameTik gameof ) {
+
+  int number = 0;
+  while ( number = ( rand (  ) / 100 ) % 9 ) {
+    if ( gameof.jogadas [ number ] == 0 )
+      break;
+  }
+  std::cout << gameof.jogada << std::endl;
+  return number;
+}
+
 int
 jogodavelha (  ) {
 
   GameTik gameof;
 
-  gameof.flag = true;
-
-  std::cout << "Digite -1 para sair: " << std::endl;
-
-  imprimeVelha ( gameof );
-
-  while ( gameof.jogada >= 0 ) {
-
-    std::cout << "Digite uma possicao: ";
-    std::cin >> gameof.jogada;
-    if ( ( gameof.jogada >= 1 ) && ( gameof.jogada <= 9 ) ) {
-
-      if ( verificaJogadaValida ( gameof ) ) {
-
-        int caracter = 0;
-
-        if ( gameof.flag ) {
-
-          caracter = 1; // X
-        } else {
-
-          caracter = 2; // O
-        }
-
-        gameof.jogadas[gameof.jogada-1] = caracter;
-      } else {
-
-        std::cout << "Digite uma possicao valida" <<
-	  std::endl;
-
-        gameof.flag = !gameof.flag;
-      }
-
-    } else {
-      std::cout << "Digite um numero entre 1 e 9" <<
-	std::endl;
-    }
+  gameof.player_turn = true;
+  gameof.playerTru = true;
+  
+  while ( gameof.playerTru ) {
     
-    if ( verificaSeGanhou ( gameof ) ) {
-
-      char caracter;
-
-      if ( gameof.flag ) {
-
-        caracter = 'X'; // X
-      } else {
-
-        caracter = 'O'; // O
-      }
-
-      imprimeVelha ( gameof );
-
-      std::cout << "Parabéns, o Jogador " << caracter << " Ganhou! \n \n" << std::endl;
-
-      std::cout << "Deseja Continuar? \n(digite qualquer numero diferente de -1) \n:";
-      std::cin >> gameof.jogada;
-
-      if ( gameof.jogada != -1 ) {
-
-        for (int i = 0; i < 9; i++) {
-
-          gameof.jogadas[i] = 0;
-        }
-      }
-    }
-
-    std::cin.clear();
-    std::cin.ignore(80, '\n'); // for space problems with cin
     imprimeVelha ( gameof );
-
-    gameof.flag = !gameof.flag;
+    gameof = inputData ( gameof );
+    gameof = continuePlayertru ( gameof );
+    clear_game_buffers (  );
+    gameof = clear_jogadas ( gameof );
+    
+    gameof.player_turn = not gameof.player_turn;
   }
-
 
   return 0;
 }
