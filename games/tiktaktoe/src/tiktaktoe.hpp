@@ -1,8 +1,19 @@
 #include <iostream>
 
-int
-imprimeVelha ( int *p, int *possicoes ) {
+typedef struct {
+  int possitions [9] = { 1,2,3,4,5,6,7,8,9 };
+  int jogadas [9] = { 0,0,0,0,0,0,0,0,0 };
+  int jogada = 0;
+  bool flag = true;
+} GameTik;
 
+
+int
+imprimeVelha ( GameTik gameof ) {
+
+  int *p = gameof.jogadas;
+  int *possicoes = gameof.possitions;
+  
   std::cout << std::endl << "###############" << std::endl;
 
   for (int i = 0; i < 3; i++) {
@@ -39,9 +50,11 @@ imprimeVelha ( int *p, int *possicoes ) {
 }
 
 bool
-verificaJogadaValida ( int *jogada, int possicao ) {
+verificaJogadaValida ( GameTik gameof ) {
 
-  if (jogada[possicao-1] == 0) {
+  int *jogadas = gameof.jogadas;
+  int possicao = gameof.jogada;
+  if (jogadas[possicao-1] == 0) {
 
     return true;
   }
@@ -50,8 +63,9 @@ verificaJogadaValida ( int *jogada, int possicao ) {
 }
 
 bool
-verificaSeGanhou ( int *jogadas ) {
+verificaSeGanhou ( GameTik gameof  ) {
 
+  int *jogadas = gameof.jogadas;
   int CON = 9;
 
   int contador = 0;
@@ -120,37 +134,28 @@ verificaSeGanhou ( int *jogadas ) {
   return false;
 }
 
-struct {
-  int vet [9] = { 1,2,3,4,5,6,7,8,9 };
-  int jogadas [9] = { 0,0,0,0,0,0,0,0,0 };
-  int jogo = 0;
-  bool flag = false;
-} JogoVelha;
-
 int
 jogodavelha (  ) {
 
-  int flag = true;
+  GameTik gameof;
 
-  int vet [9] = { 1,2,3,4,5,6,7,8,9 };
-  int jogadas [9] = { 0,0,0,0,0,0,0,0,0 };
-  int jogo = 0;
+  gameof.flag = true;
 
   std::cout << "Digite -1 para sair: " << std::endl;
 
-  imprimeVelha ( vet, jogadas );
+  imprimeVelha ( gameof );
 
-  while ( jogo >= 0 ) {
+  while ( gameof.jogada >= 0 ) {
 
     std::cout << "Digite uma possicao: ";
-    std::cin >> jogo;
-    if ( ( jogo >= 1 ) && ( jogo <= 9 ) ) {
+    std::cin >> gameof.jogada;
+    if ( ( gameof.jogada >= 1 ) && ( gameof.jogada <= 9 ) ) {
 
-      if ( verificaJogadaValida ( jogadas, jogo ) ) {
+      if ( verificaJogadaValida ( gameof ) ) {
 
         int caracter = 0;
 
-        if (flag) {
+        if ( gameof.flag ) {
 
           caracter = 1; // X
         } else {
@@ -158,13 +163,13 @@ jogodavelha (  ) {
           caracter = 2; // O
         }
 
-        jogadas[jogo-1] = caracter;
+        gameof.jogadas[gameof.jogada-1] = caracter;
       } else {
 
         std::cout << "Digite uma possicao valida" <<
 	  std::endl;
 
-        flag = !flag;
+        gameof.flag = !gameof.flag;
       }
 
     } else {
@@ -172,11 +177,11 @@ jogodavelha (  ) {
 	std::endl;
     }
     
-    if ( verificaSeGanhou ( jogadas ) ) {
+    if ( verificaSeGanhou ( gameof ) ) {
 
       char caracter;
 
-      if ( flag ) {
+      if ( gameof.flag ) {
 
         caracter = 'X'; // X
       } else {
@@ -184,27 +189,27 @@ jogodavelha (  ) {
         caracter = 'O'; // O
       }
 
-      imprimeVelha ( vet, jogadas );
+      imprimeVelha ( gameof );
 
       std::cout << "Parabéns, o Jogador " << caracter << " Ganhou! \n \n" << std::endl;
 
       std::cout << "Deseja Continuar? \n(digite qualquer numero diferente de -1) \n:";
-      std::cin >> jogo;
+      std::cin >> gameof.jogada;
 
-      if ( jogo != -1 ) {
+      if ( gameof.jogada != -1 ) {
 
         for (int i = 0; i < 9; i++) {
 
-          jogadas[i] = 0;
+          gameof.jogadas[i] = 0;
         }
       }
     }
 
     std::cin.clear();
     std::cin.ignore(80, '\n'); // for space problems with cin
-    imprimeVelha (vet, jogadas);
+    imprimeVelha ( gameof );
 
-    flag = !flag;
+    gameof.flag = !gameof.flag;
   }
 
 
@@ -213,11 +218,14 @@ jogodavelha (  ) {
 
 int
 testaSeJogadorGanhou (  ) {
-  int vet [9] =     { 1,2,3,4,5,6,7,8,9 };
-  int jogadas [9] = { 2,0,2,
-		      1,2,1,
-		      2,1,2 };  // OK To verify horizontal values of game velha
-  if (  verificaSeGanhou ( jogadas ) ) {
+
+  GameTik some_test_game;
+  
+  int jogadas [9] = { 2,0,2,1,2,1,2,1,2 };  // OK To verify horizontal values of game velha
+
+  for (int i = 0; i < 9; i++)
+    some_test_game.jogadas[i] = jogadas[i];
+  if (  verificaSeGanhou ( some_test_game ) ) {
 
     std::cout << "Ganhou" << std::endl;
   } else {
