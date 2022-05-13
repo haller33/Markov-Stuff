@@ -193,8 +193,6 @@ inputData ( GameTik gameof ) {
   
   caracter_simbol_number = number_player ( gameof );
   
-  gameof.jogadas[gameof.jogada-1] = caracter_simbol_number;
-  
   return gameof;
 }
 
